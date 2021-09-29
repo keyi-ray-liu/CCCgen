@@ -72,6 +72,7 @@ def onsite_gen(sites, NN, searchdict, para):
     const = para['CONST']
     latcon = para['latcon']
     ctype = para['ctype']
+    ifoffdiag = para['ifoffdiag']
 
     with open('diagcorr') as f:
         epsilon = float(f.readline())
@@ -83,13 +84,14 @@ def onsite_gen(sites, NN, searchdict, para):
 
             cccdiag  += [[float(val) for val in f.readline().split()]]
 
+    if ifoffdiag:
 
-    with open('offdiagcorr') as f:
-        cccoff = []
+        with open('offdiagcorr') as f:
+            cccoff = []
 
-        for _ in range(17):
+            for _ in range(17):
 
-            cccoff  += [[float(val) for val in f.readline().split()]]
+                cccoff  += [[float(val) for val in f.readline().split()]]
 
     diag = np.zeros((size, 10))
     offdiag = [ 0 for _ in range(size)]
@@ -128,15 +130,17 @@ def onsite_gen(sites, NN, searchdict, para):
             else:
                 diag[i] += cccdiag[dopNN.index(i)]
 
-                if offdiag[i] == 0:
+                if ifoffdiag: 
+                    
+                    if offdiag[i] == 0:
 
-                    offdiag[i] = cccoff[dopNN.index(i)]
+                        offdiag[i] = cccoff[dopNN.index(i)]
 
-                else:
+                    else:
 
-                    offdiag[i] += cccoff[dopNN.index(i)]
+                        offdiag[i] += cccoff[dopNN.index(i)]
 
-                corrchart[i] = 1
+                    corrchart[i] = 1
 
     
     np.savetxt('diagonal.dat', diag)
@@ -154,7 +158,7 @@ def offsite_gen(para):
     size = para['size']
     offsite = np.zeros((size, 1))
 
-    np.savetxt('offsite', offsite)
+    np.savetxt('offsite.dat', offsite)
 
 if __name__ == '__main__':
     para = readpara()
