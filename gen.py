@@ -94,7 +94,7 @@ def onsite_gen(sites, NN, searchdict, para):
                 cccoff  += [[float(val) for val in f.readline().split()]]
 
     diag = np.zeros((size, 10))
-    offdiag = [ 0 for _ in range(size)]
+    offdiag = [ [0] for _ in range(size)]
     corrchart = [ 0 for _ in range(size)]
 
     for dop in dops:
@@ -148,7 +148,7 @@ def onsite_gen(sites, NN, searchdict, para):
     with open('offdiag.dat', 'w') as f:
 
         for site in range(size):
-            f.write(str(offdiag[site]) + '\n')
+            f.write( ' '.join([str(num) for num in offdiag[site]]) + '\n')
 
     np.savetxt('corrchart.dat', corrchart, fmt='%i')
 
