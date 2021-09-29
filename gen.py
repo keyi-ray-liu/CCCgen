@@ -93,6 +93,9 @@ def onsite_gen(sites, NN, searchdict, para):
 
                 cccoff  += [[float(val) for val in f.readline().split()]]
 
+    cccdiag = np.array(cccdiag)
+    cccoff = np.array(cccoff)
+
     diag = np.zeros((size, 10))
     offdiag = [ [0] for _ in range(size)]
     corrchart = [ 0 for _ in range(size)]
@@ -105,7 +108,7 @@ def onsite_gen(sites, NN, searchdict, para):
         if ctype == 'dop':
             dopNN = [dopid]
 
-        elif ctype == 'NN':
+        elif ctype == '1NN':
             dopNN = [dopid] + NN[dopid]
 
         elif ctype == '2NN':
@@ -132,7 +135,7 @@ def onsite_gen(sites, NN, searchdict, para):
 
                 if ifoffdiag: 
                     
-                    if offdiag[i] == 0:
+                    if len(offdiag[i]) == 1:
 
                         offdiag[i] = cccoff[dopNN.index(i)]
 
