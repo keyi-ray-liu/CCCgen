@@ -98,6 +98,9 @@ def onsite_gen(sites, NN, searchdict, para):
 
     diag = np.zeros((size, 10))
     offdiag = [ [0] for _ in range(size)]
+
+    # current no offsite
+    offsite = [ [0] for _ in range(size)]
     corrchart = [ 0 for _ in range(size)]
 
     for dop in dops:
@@ -145,6 +148,9 @@ def onsite_gen(sites, NN, searchdict, para):
 
                     corrchart[i] = 1
 
+                # default set offsite to 0
+                offsite[i] = np.zeros(400)
+
     
     np.savetxt('diagonal.dat', diag)
 
@@ -153,18 +159,17 @@ def onsite_gen(sites, NN, searchdict, para):
         for site in range(size):
             f.write( ' '.join([str(num) for num in offdiag[site]]) + '\n')
 
+    with open('offsite.dat', 'w') as f:
+
+        for site in range(size):
+            f.write( ' '.join([str(num) for num in offsite[site]]) + '\n')
+
+
     np.savetxt('corrchart.dat', corrchart, fmt='%i')
 
 
-# currently no offsite
-def offsite_gen(para):
-    size = para['size']
-    offsite = np.zeros((size, 1))
-
-    np.savetxt('offsite.dat', offsite)
 
 if __name__ == '__main__':
     para = readpara()
     sites, NN, searchdict = readlattice(para)
     onsite_gen(sites, NN, searchdict, para)
-    offsite_gen(para)
