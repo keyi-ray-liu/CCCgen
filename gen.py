@@ -5,12 +5,13 @@ import numpy as np
 def readpara():
 
     with open('paras') as f:
-        ifoffdiag, ifoffsite, numdop, ctype = f.readline().split()
+        ifoffdiag, ifoffsite, numdop, ctype, offscale = f.readline().split()
         para = {
             'ifoffdiag': int(ifoffdiag),
             'ifoffsite': int(ifoffsite),
             'numdop': int(numdop),
-            'ctype': ctype
+            'ctype': ctype,
+            'offscale': float(offscale)
         }
 
         dops = []
@@ -73,6 +74,7 @@ def onsite_gen(sites, NN, searchdict, para):
     latcon = para['latcon']
     ctype = para['ctype']
     ifoffdiag = para['ifoffdiag']
+    offscale = para['offscale']
 
     with open('diagcorr') as f:
         epsilon = float(f.readline())
@@ -95,6 +97,7 @@ def onsite_gen(sites, NN, searchdict, para):
 
     cccdiag = np.array(cccdiag)
     cccoff = np.array(cccoff)
+    cccoff *= offscale
 
     diag = np.zeros((size, 10))
     offdiag = [ [0] for _ in range(size)]
